@@ -1,0 +1,20 @@
+{
+  "name": "imgbackukp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "startWatch": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "image-size": "^0.6.2",
+    "jimp": "^0.2.28",
+    "mime": "^2.3.1",
+    "node-fetch": "^2.1.2",
+    "promise-queue": "^2.2.5",
+    "winston": "^3.2.1"
+  }
+}
