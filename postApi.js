@@ -12,12 +12,12 @@ async function getPostsSince(refDate) {
 	rangeEnd.setDate(rangeEnd.getDate() + 1)
 
 	const dateRange = `${dateToRangeString(refDate)}-${dateToRangeString(rangeEnd)}`
-	let before = null
+	let after = null
 	let posts = []
 	let res
 	do {
 		if (res)
-			before = res.data.reader.posts.pageInfo.endCursor
+			after = res.data.reader.posts.pageInfo.endCursor
 		res = await fetch(config.graphEndpoint, {
 			method: 'POST',
 			headers: {
@@ -27,9 +27,9 @@ async function getPostsSince(refDate) {
 			body: JSON.stringify({
 				query: `{
 				reader{
-					posts(dateRange:"${dateRange}" last:${QUERY_LIMIT} ${before ? `before:"${before}"` : ''}){
+					posts(dateRange:"${dateRange}" first:${QUERY_LIMIT} ${after ? `after:"${after}"` : ''}){
 						pageInfo{
-							hasPreviousPage
+							hasNextPage
 							endCursor
 						}
 						edges{
@@ -52,10 +52,10 @@ async function getPostsSince(refDate) {
 			imgUrl: edge.node.imgUrl,
 			text: edge.node.text
 		})))
-	} while (res.data.reader.posts.pageInfo.hasPreviousPage)
+	} while (res.data.reader.posts.pageInfo.hasNextPage)
 
 	winston.log('info', `finished fetching ${posts.length} posts`)
 	return posts
 }
 
-module.exports = {getPostsSince}
+module.exports = { getPostsSince }
